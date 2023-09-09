@@ -1,0 +1,71 @@
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_constraint_enable`()
+begin
+    
+	declare process_name varchar(30);
+    declare operation_type varchar(50);
+    declare log_details varchar(50);
+    
+    
+    set operation_type = 'adding constraint';
+    set process_name = 'sp_constraint_enable';
+
+
+alter table tbl_fnl_film_actor
+add constraint fk_film_actr_actr foreign key (actor_id) references tbl_fnl_actor(actor_id);
+alter table tbl_fnl_film_actor
+add constraint fk_film_actr_film  foreign key (film_id) references tbl_fnl_film(film_id);
+alter table tbl_fnl_inventory
+add constraint fk_invtry_store foreign key (store_id) references tbl_fnl_store(store_id);
+alter table tbl_fnl_inventory
+add constraint fk_invtry_film foreign key (location_id) references tbl_fnl_film(film_id);
+alter table tbl_fnl_staff
+add constraint fk_stf_store foreign key (store_id) references tbl_fnl_store(store_id);
+alter table tbl_fnl_staff
+add constraint fk_stf_add foreign key (address_id) references tbl_fnl_address(address_id);
+alter table tbl_fnl_city 
+add constraint fk_city_cntry foreign key (country_id) references tbl_fnl_employees(country_id);
+alter table tbl_fnl_film 
+add constraint fk_film_lnge foreign key (language_id) references tbl_fnl_language(language_id);
+alter table tbl_fnl_rental 
+add constraint fk_rntl_invtry foreign key (inventory_id) references tbl_fnl_inventory(inventory_id);
+alter table tbl_fnl_rental 
+add constraint fk_rntl_custmr foreign key (customer_id) references tbl_fnl_customer(customer_id);  
+alter table tbl_fnl_film_text 
+add constraint fk_flmtxt_film foreign key (film_id) references tbl_fnl_film(film_id);
+alter table tbl_fnl_customer 
+add constraint fk_custmr_str foreign key (store_id) references tbl_fnl_store(store_id);
+alter table tbl_fnl_customer 
+add constraint fk_custmr_add foreign key (address_id) references tbl_fnl_address(address_id);
+alter table tbl_fnl_address 
+add constraint fk_add_city foreign key (city_id) references tbl_fnl_city(city_id);
+alter table tbl_fnl_payment 
+add constraint fk_pymt_custmr foreign key (customer_id) references tbl_fnl_customer(customer_id);
+alter table tbl_fnl_payment 
+add constraint fk_pymt_stf foreign key (staff_id) references tbl_fnl_staff(staff_id);
+alter table tbl_fnl_payment 
+add constraint fk_pymt_rntl foreign key (rental_id) references tbl_fnl_rental(rental_id);
+alter table tbl_fnl_film_category 
+add constraint fk_filmctry_film foreign key (film_id) references tbl_fnl_film(film_id);
+alter table tbl_fnl_film_category 
+add constraint fk_filmctry_ctry foreign key (category_id) references tbl_fnl_category(category_id);
+  /*  if source1_count <> target1_count then
+        set log_details = 'there is a mismatch, need to check the flow';
+    else
+        set log_details = 'there is no mismatch, data loaded successfully';
+    end if;
+    */
+    insert into bluebox_dvd_audit_control 
+    (
+    process_name,
+    operation_type,
+    operated_by,
+	operation_date)
+    values 
+        (
+        process_name,
+        operation_type,
+        current_user(),
+        current_timestamp());
+        
+
+end
