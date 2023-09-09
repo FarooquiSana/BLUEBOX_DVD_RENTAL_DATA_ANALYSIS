@@ -9,6 +9,20 @@ begin
     set operation_type = 'adding constraint';
     set process_name = 'sp_constraint_enable';
 
+alter table tbl_fnl_actor add constraint pk_actor_id primary key (actor_id);
+alter table tbl_fnl_address add constraint pk_address_id primary key (address_id);
+alter table tbl_fnl_category add constraint pk_category_id primary key (category_id);
+alter table tbl_fnl_city add constraint pk_city_id primary key (city_id);
+alter table tbl_fnl_country add constraint pk_country_id primary key (country_id);
+alter table tbl_fnl_customer add constraint pk_customer_id primary key (customer_id);
+alter table tbl_fnl_film add constraint pk_film_id primary key (film_id);
+alter table tbl_fnl_inventory add constraint pk_inventory_id primary key (inventory_id);
+alter table tbl_fnl_language add constraint pk_language_id primary key (language_id);
+alter table tbl_fnl_payment add constraint pk_payment_id primary key (payment_id);
+alter table tbl_fnl_rental add constraint pk_rental_id primary key (rental_id);
+alter table tbl_fnl_staff add constraint pk_staff_id primary key (staff_id);
+alter table tbl_fnl_store add constraint pk_store_id primary key (store_id);
+
 
 alter table tbl_fnl_film_actor
 add constraint fk_film_actr_actr foreign key (actor_id) references tbl_fnl_actor(actor_id);
@@ -48,12 +62,7 @@ alter table tbl_fnl_film_category
 add constraint fk_filmctry_film foreign key (film_id) references tbl_fnl_film(film_id);
 alter table tbl_fnl_film_category 
 add constraint fk_filmctry_ctry foreign key (category_id) references tbl_fnl_category(category_id);
-  /*  if source1_count <> target1_count then
-        set log_details = 'there is a mismatch, need to check the flow';
-    else
-        set log_details = 'there is no mismatch, data loaded successfully';
-    end if;
-    */
+ 
     insert into bluebox_dvd_audit_control 
     (
     process_name,
